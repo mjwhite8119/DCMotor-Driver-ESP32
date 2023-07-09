@@ -1,7 +1,9 @@
 #ifndef _ENCODER_H_
 #define _ENCODER_H_
 
-#include <Arduino.h>
+#ifndef Arduino
+  #include <Arduino.h>
+#endif
 
 #define STOPPED 2
 #define FORWARD 1
