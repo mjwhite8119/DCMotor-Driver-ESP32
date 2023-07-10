@@ -5,8 +5,12 @@
   #include <Arduino.h>
 #endif
 
-#ifndef BournEncoder
-  #include "BournEncoder.h"
+#ifndef Config
+  #include <Config.h>
+#endif
+
+#ifndef MagEncoder
+  #include "MagEncoder.h"
 #endif
 
 #define STOPPED 2
@@ -20,10 +24,10 @@ class Motor
     Motor() {} // Default constructor
 
     // Constructor to connect Motor GPIO pins to microcontroller
-    Motor( uint8_t encoderPort, uint8_t in1Port, uint8_t in2Port, uint8_t mode=0);
+    Motor(uint8_t pinGroup, uint8_t mode=0);
 
     // Encoder attached to the motor
-    BournEncoder encoder;
+    MagEncoder encoder;
 
     // PMW for motors
     const int channel_0 = 0;

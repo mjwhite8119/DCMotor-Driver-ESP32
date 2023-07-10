@@ -5,10 +5,10 @@
 #include "I2C_Config.h"
 #include "Motor.h"
 
-Motor pinkMotor = Motor(ENCODER1, MOTOR1_IN1, MOTOR1_IN2, MOTOR_MODE);
-// Motor ringMotor = Motor(RING_IN3, RING_IN4, RING_ENCODER);
-// Motor middleMotor = Motor(MIDDLE_IN1, MIDDLE_IN2, MIDDLE_ENCODER);
-// Motor indexMotor = Motor(INDEX_IN3, INDEX_IN4, INDEX_ENCODER);
+Motor pinkMotor = Motor(0, MOTOR_MODE);
+// Motor ringMotor = Motor(1, MOTOR_MODE);
+// Motor middleMotor = Motor(2, MOTOR_MODE);
+// Motor indexMotor = Motor(3, MOTOR_MODE);
 
 // int loop_count = 0;
 // int print_count = 0;

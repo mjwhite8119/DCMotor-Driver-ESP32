@@ -1,5 +1,5 @@
-#ifndef _ENCODER_H_
-#define _ENCODER_H_
+#ifndef _BOURN_ENCODER_H_
+#define _BOURN_ENCODER_H_
 
 #ifndef Arduino
   #include <Arduino.h>
@@ -71,4 +71,4 @@ class BournEncoder
 
 };
 
-#endif // _ENCODER_H_
+#endif // _BOURN_ENCODER_H_

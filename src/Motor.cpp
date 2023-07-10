@@ -3,8 +3,8 @@
 // -------------------Constructors -----------------------------------
 
 // Constructor to connect Motor GPIO pins to microcontroller
-Motor::Motor(uint8_t encoderPort, uint8_t in1Port, uint8_t in2Port, uint8_t mode)
-  :encoder(encoderPort), in1Port_(in1Port), in2Port_(in2Port), mode_(mode) 
+Motor::Motor(uint8_t pinGroup, uint8_t mode)
+  :encoder(pinGroup), mode_(mode) 
   {
     if (mode == 1) {
       // create a PWM channels
@@ -12,20 +12,20 @@ Motor::Motor(uint8_t encoderPort, uint8_t in1Port, uint8_t in2Port, uint8_t mode
       ledcSetup(channel_1, freq, resolution); 
 
       // attach channels to pins
-      ledcAttachPin(in1Port, channel_0); 
-      ledcAttachPin(in2Port, channel_1);
+      ledcAttachPin(motorPinGroup[pinGroup].motorIN1, channel_0); 
+      ledcAttachPin(motorPinGroup[pinGroup].motorIN2, channel_1);
 
       // Make sure motor is off
       ledcWrite(channel_0, 0);
       ledcWrite(channel_1, 0);
       
     } else {
-      pinMode(in1Port,OUTPUT);
-      pinMode(in2Port,OUTPUT); 
+      pinMode(motorPinGroup[pinGroup].motorIN1,OUTPUT);
+      pinMode(motorPinGroup[pinGroup].motorIN2,OUTPUT); 
 
       // Make sure motor is off
-      digitalWrite(in1Port, LOW);
-      digitalWrite(in2Port, LOW);
+      digitalWrite(motorPinGroup[pinGroup].motorIN1, LOW);
+      digitalWrite(motorPinGroup[pinGroup].motorIN2, LOW);
     }
     
   }  

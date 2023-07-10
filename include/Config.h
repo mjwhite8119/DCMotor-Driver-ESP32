@@ -15,14 +15,17 @@
 
 // --- Define ENCODERS ---
 // These refer to the GPIO numbers
-#define ENCODER1 36 // PINK_ENCODER
-#define ENCODER2 39 // RING_ENCODER
-#define ENCODER3 34 // MIDDLE_ENCODER
-#define ENCODER4 35 // INDEX_ENCODER
-#define ENCODER5 32
-#define ENCODER6 33
-#define ENCODER7 25
-#define ENCODER8 26
+#define ENCODER1_A 36 
+#define ENCODER1_B 39 
+
+#define ENCODER2_A 34 
+#define ENCODER2_B 35 
+
+#define ENCODER3_A 32
+#define ENCODER3_B 33
+
+#define ENCODER4_A 25
+#define ENCODER4_B 26
 
 // --- Define MOTORS ---
 // These refer to the GPIO numbers
@@ -49,6 +52,19 @@
 
 #define MOTOR8_IN1 7
 #define MOTOR8_IN2 6 
+
+//---------------------------------------
+// Define the GPIO pins for the motors
+//---------------------------------------
+static struct DRAM_ATTR MotorPins {
+  const byte motorIN1; // motor IN1 pin1
+  const byte motorIN2; // motor IN2 pin2
+  const byte encoderA; // encoder channel A
+  const byte encoderB; // encoder channel B
+} motorPinGroup[4] = {MOTOR1_IN1, MOTOR1_IN2, ENCODER1_A, ENCODER1_B,
+                      MOTOR2_IN1, MOTOR2_IN2, ENCODER2_A, ENCODER2_B,
+                      MOTOR3_IN1, MOTOR3_IN2, ENCODER3_A, ENCODER3_B,
+                      MOTOR4_IN1, MOTOR4_IN2, ENCODER4_A, ENCODER4_B};
 
 // Define the motor mode here!
 #define DIGITAL 0
