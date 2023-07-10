@@ -47,14 +47,20 @@ class Encoder
     }
 
     void printInfo() {
-      printPort(); Serial.print(rotations); Serial.print(":"); Serial.print(position);
-      Serial.print(" Raw "); Serial.print(raw);Serial.print(" Offset "); Serial.println(offset);
+      if (count > 10) {
+        printPort(); Serial.print(rotations); Serial.print(":"); Serial.print(position);
+       Serial.print(" Raw "); Serial.print(raw);Serial.print(" Offset "); Serial.print(offset);
+       Serial.print(" Continuous Position "); Serial.println(continuous_position);
+        count = 0;
+      }  
+      count += 1;   
     }
 
   private:
 
     uint8_t port_;
-    int16_t last_position = 0;
+    int16_t continuous_position = 0;
+    int count = 0;
 
     int16_t applyDeadband(int16_t input, const int16_t threshold) {
       if (input < -threshold || input > threshold) {

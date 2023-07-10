@@ -59,7 +59,7 @@
 #define BUTTON_PIN1 12 // ADC
 #define BUTTON_PIN2 14 // ADC
 #define BUTTON_PIN3 27 // ADC
-#define BUTTON_PIN3 23
+#define BUTTON_PIN4 23
 
 // Can also use for analog reads
 #define ANALOG_PIN1 12 // ADC

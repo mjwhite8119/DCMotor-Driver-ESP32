@@ -45,6 +45,7 @@ class Motor
     uint8_t mode_;
 
      int DBSpeed_ = 0;
+     int count = 0;
 
     double applyDeadband(double input, double threshold) {
       if (input < -threshold || input > threshold) {
@@ -54,11 +55,19 @@ class Motor
     }
 
     void printPort() {
-      Serial.print("Ports "); Serial.print(in1Port_); Serial.print(","); Serial.print(in2Port_);Serial.print(": ");
+      if (count > 1000) {
+        Serial.print("Ports "); Serial.print(in1Port_); Serial.print(","); Serial.print(in2Port_);Serial.print(": ");
+        count = 0;
+      }  
+      count += 1; 
     }
 
     void printSpeed() {
-      Serial.print("Speed "); Serial.println(DBSpeed_);
+      if (count > 1000) {
+        Serial.print("Ports "); Serial.print(in1Port_); Serial.print(", ");Serial.print("Speed "); Serial.println(DBSpeed_);
+        count = 0;
+      }  
+      count += 1; 
     }
 
 };

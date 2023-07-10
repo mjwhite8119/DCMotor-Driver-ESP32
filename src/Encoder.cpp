@@ -7,7 +7,7 @@ Encoder::Encoder(uint8_t port)
 
 void Encoder::init() {
   position = map(analogRead(port_), 0, 1023, 0, 100);
-  last_position = position;
+  continuous_position = position;
   printPort(); Serial.print("Initialized. "); printPosition(); printRotations();
 }
 
@@ -17,37 +17,45 @@ int16_t Encoder::readEncoder() {
   
   if (position != 100) {
     if (transitioning & (direction == FORWARD) & (position != 0)) {
-      return getRotations() - offset;
+      continuous_position = getRotations() - offset;
+      return continuous_position;
     }
     else if (transitioning & (direction == REVERSE) & (position != 100)) {
-      return getRotations() - offset;
+      continuous_position = getRotations() - offset;
+      return continuous_position;
     }  
 
     transitioning = false;
-    return getRotations() + getPosition();
+    continuous_position = getRotations() + getPosition();
+    return continuous_position;
   }
 
   // Stopped at 100 so return current value since we have no direction
   if (direction == STOPPED) {
-    return getRotations() - offset;
+    continuous_position = getRotations() - offset;
+    return continuous_position;
   }
 
   // We've taken care of the rotations already so return
   if (transitioning == true) {
-    return getRotations() - offset;
+    continuous_position = getRotations() - offset;
+    return continuous_position;
   }
   
   // Transitioning so take care of business
   transitioning = true;
 
   if (direction == FORWARD) {
+    Serial.println("ROTATIONS +");
     rotations += 1;
   } else {
+    Serial.println("ROTATIONS -");
     rotations -= 1;  
   }
 
   // Only return position so as not to double count
-  return getPosition();
+  continuous_position = getPosition();
+  return continuous_position;
 }
 
 void Encoder::resetEncoder() {

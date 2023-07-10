@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "Config.h"
+#include "Util.h"
 #include "I2C_Config.h"
 #include "Motor.h"
 
@@ -22,10 +23,10 @@ void setupMotors() {
 }
 
 void setupButtons() {
-  pinMode(BUTTON_PIN1, INPUT_PULLUP);
-  pinMode(BUTTON_PIN2, INPUT_PULLUP);
+  // pinMode(BUTTON_PIN1, INPUT_PULLUP);
+  // pinMode(BUTTON_PIN2, INPUT_PULLUP);
   pinMode(BUTTON_PIN3, INPUT_PULLUP);
-  pinMode(BUTTON_PIN3, INPUT_PULLUP);
+  // pinMode(BUTTON_PIN3, INPUT_PULLUP);
 }
 
 // -------------------------------------------------- //
@@ -60,41 +61,35 @@ void loop() {
 
   // Get the latest data including recent i2c master writes
   rPiLink.updateBuffer();
-
-  int analogValue = analogRead(ANALOG_PIN1); 
-  // Rescale to potentiometer's voltage (from 0V to 3.3V):
-  float voltage = floatMap(analogValue, 0, 4095, 0, 3.3);
-
-  // print out the value you read:
-  Serial.print("Analog: ");
-  Serial.print(analogValue);
-  Serial.print(", Voltage: ");
-  Serial.println(voltage);
-  delay(1000);
-
   // Constantly write the firmware ident
   rPiLink.buffer.firmwareIdent = FIRMWARE_IDENT;
   rPiLink.buffer.status = 1;
 
+  int analogValue = analogRead(ANALOG_PIN1); 
+  int speed = map(analogValue, 0, 4095, 0, 255);
+
+  rPiLink.buffer.pinkMotor = speed;
+
+  logOutput(analogValue, speed);
+
   // Update the built-ins.  These are 4 boolean values
   // rPiLink.buffer.builtinDioValues[0] = digitalRead(BUTTON_PIN);
 
-  if (digitalRead(BUTTON_PIN1) == LOW) {
+  if (digitalRead(BUTTON_PIN3) == LOW) {
     pinkMotor.encoder.resetEncoder();
-    // i2cScan();
     // ringMotor.encoder.resetEncoder();
     // middleMotor.encoder.resetEncoder();
     // indexMotor.encoder.resetEncoder();
   }
 
-  if (digitalRead(BUTTON_PIN2) == LOW) {
-    rPiLink.buffer.pinkMotor = 200;
-  }
-  else if (digitalRead(BUTTON_PIN3) == LOW) {
-    rPiLink.buffer.pinkMotor = -200;
-  } else {
-    rPiLink.buffer.pinkMotor = 0;
-  }
+  // if (digitalRead(BUTTON_PIN2) == LOW) {
+  //   rPiLink.buffer.pinkMotor = 200;
+  // }
+  // else if (digitalRead(BUTTON_PIN3) == LOW) {
+  //   rPiLink.buffer.pinkMotor = -200;
+  // } else {
+  //   rPiLink.buffer.pinkMotor = 0;
+  // }
   
   // Check if button A is pressed
   // if (rPiLink.buffer.builtinDioValues[0] == HIGH) {
