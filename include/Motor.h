@@ -5,8 +5,8 @@
   #include <Arduino.h>
 #endif
 
-#ifndef Encoder
-  #include "Encoder.h"
+#ifndef BournEncoder
+  #include "BournEncoder.h"
 #endif
 
 #define STOPPED 2
@@ -23,7 +23,7 @@ class Motor
     Motor( uint8_t encoderPort, uint8_t in1Port, uint8_t in2Port, uint8_t mode=0);
 
     // Encoder attached to the motor
-    Encoder encoder;
+    BournEncoder encoder;
 
     // PMW for motors
     const int channel_0 = 0;

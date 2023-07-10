@@ -9,11 +9,11 @@
 #define FORWARD 1
 #define REVERSE 0
 
-class Encoder
+class BournEncoder
 {  
    public:
 
-    Encoder() {} // Default constructor  
+    BournEncoder() {} // Default constructor  
 
     uint8_t direction = STOPPED;
     int16_t rotations = 0;
@@ -23,7 +23,7 @@ class Encoder
     boolean transitioning = false;
 
     // Constructor to connect encoder GPIO pins to microcontroller
-    Encoder(uint8_t port);
+    BournEncoder(uint8_t port);
 
     void init();
 

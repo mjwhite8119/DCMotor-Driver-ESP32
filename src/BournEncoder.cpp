@@ -1,17 +1,17 @@
-#include "Encoder.h"
+#include "BournEncoder.h"
 
 // Constructor to connect encoder GPIO pins to microcontroller
-Encoder::Encoder(uint8_t port)
+BournEncoder::BournEncoder(uint8_t port)
   :port_(port)
 {}  
 
-void Encoder::init() {
+void BournEncoder::init() {
   position = map(analogRead(port_), 0, 1023, 0, 100);
   continuous_position = position;
   printPort(); Serial.print("Initialized. "); printPosition(); printRotations();
 }
 
-int16_t Encoder::readEncoder() {
+int16_t BournEncoder::readEncoder() {
   raw = analogRead(port_);
   position = map(raw, 0, 4095, 0, 100);
   
@@ -58,7 +58,7 @@ int16_t Encoder::readEncoder() {
   return continuous_position;
 }
 
-void Encoder::resetEncoder() {
+void BournEncoder::resetEncoder() {
   rotations = 0;
   offset = position;
   Serial.print("Reset "); printInfo();
