@@ -28,6 +28,7 @@ class MagEncoder
     // that it doesn't interfere with the rest of the code.
     volatile int32_t ticks = 0;
     uint8_t direction = STOPPED;
+    int count = 0;
 
     // Encoder interrupt routines
     static void encoderISRA ()
@@ -42,16 +43,19 @@ class MagEncoder
         MagEncoder::instances [1]->encoderBFired_();
     }
       
+    void init();
+
     // Instance members to get encoder ticks. Called from ISR
 
     // Checks encoder A
     void IRAM_ATTR encoderAFired_();
 
-    // Checks encoder B
+    // // Checks encoder B
     void IRAM_ATTR encoderBFired_();
 
     void resetEncoder() {
       ticks = 0;
+      printPort();Serial.println(" Encoder reset");
     }
 
     int32_t readEncoder() {
@@ -59,11 +63,16 @@ class MagEncoder
     }
 
     void printInfo() {
-      Serial.print("Ticks:");Serial.print(ticks);      
+      if (count > 100) {
+        Serial.print("Ticks:");Serial.println(ticks);   
+        count = 0;
+      }  
+      count += 1; 
+         
     }
 
     void printPort() {
-      // Serial.print("Port "); Serial.print(portA_);Serial.print(": ");
+      Serial.print("Port ");Serial.print(motorPinGroup[pinGroup_].encoderA);
     }
 
 

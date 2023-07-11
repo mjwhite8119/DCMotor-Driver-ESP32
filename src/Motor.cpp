@@ -33,6 +33,8 @@ Motor::Motor(uint8_t pinGroup, uint8_t mode)
 
 void Motor::init() {
   Serial.print("Motor initiated on "); printPort(); Serial.println("");
+  encoder.init();
+  
   encoder.resetEncoder();
   Serial.print("Encoder "); encoder.printPort(); Serial.println("");
 }

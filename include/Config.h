@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
 /*
   This configuration is for the ESP32 NodeMCU development board.
 */
@@ -80,3 +81,5 @@ static struct DRAM_ATTR MotorPins {
 // Can also use for analog reads
 #define ANALOG_PIN1 12 // ADC
 #define ANALOG_PIN2 14 // ADC
+
+#endif // _CONFIG_H_

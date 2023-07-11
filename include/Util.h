@@ -6,7 +6,7 @@
 
 int count = 0;
 void logOutput (int analogValue, int speed) {
-  if (count > 1000 & speed > 0) {
+  if (count > 1000 & speed > 10) {
     Serial.print("Analog: ");
     Serial.print(analogValue);
     Serial.print(", Speed: ");

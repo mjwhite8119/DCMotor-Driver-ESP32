@@ -14,6 +14,13 @@ Motor pinkMotor = Motor(0, MOTOR_MODE);
 // int print_count = 0;
 // int button_state = LOW;
 
+int readPot() {
+  int analogValue = analogRead(ANALOG_PIN1); 
+  int speed = map(analogValue, 0, 4095, 0, 255);
+  logOutput(analogValue, speed);
+  return speed;
+}
+
 void setupMotors() {
   
   pinkMotor.init();
@@ -65,12 +72,9 @@ void loop() {
   rPiLink.buffer.firmwareIdent = FIRMWARE_IDENT;
   rPiLink.buffer.status = 1;
 
-  int analogValue = analogRead(ANALOG_PIN1); 
-  int speed = map(analogValue, 0, 4095, 0, 255);
+  int speed = readPot();
 
   rPiLink.buffer.pinkMotor = speed;
-
-  logOutput(analogValue, speed);
 
   // Update the built-ins.  These are 4 boolean values
   // rPiLink.buffer.builtinDioValues[0] = digitalRead(BUTTON_PIN);
