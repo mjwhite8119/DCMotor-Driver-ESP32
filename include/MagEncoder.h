@@ -63,7 +63,7 @@ class MagEncoder
     }
 
     void printInfo() {
-      if (count > 100) {
+      if (count > 1000) {
         Serial.print("Ticks:");Serial.println(ticks);   
         count = 0;
       }  

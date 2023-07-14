@@ -4,15 +4,12 @@
 #include "Util.h"
 #include "I2C_Config.h"
 #include "Motor.h"
+// #include "GameController.h"
 
 Motor pinkMotor = Motor(0, MOTOR_MODE);
 // Motor ringMotor = Motor(1, MOTOR_MODE);
 // Motor middleMotor = Motor(2, MOTOR_MODE);
 // Motor indexMotor = Motor(3, MOTOR_MODE);
-
-// int loop_count = 0;
-// int print_count = 0;
-// int button_state = LOW;
 
 int readPot() {
   int analogValue = analogRead(ANALOG_PIN1); 
@@ -31,10 +28,11 @@ void setupMotors() {
 
 void setupButtons() {
   // pinMode(BUTTON_PIN1, INPUT_PULLUP);
-  // pinMode(BUTTON_PIN2, INPUT_PULLUP);
+  pinMode(BUTTON_PIN2, INPUT_PULLUP);
   pinMode(BUTTON_PIN3, INPUT_PULLUP);
-  // pinMode(BUTTON_PIN3, INPUT_PULLUP);
+  pinMode(BUTTON_PIN4, INPUT_PULLUP);
 }
+
 
 // -------------------------------------------------- //
 // Setup and Main                                     //
@@ -42,9 +40,10 @@ void setupButtons() {
 void setup()
 {
   Serial.begin(115200);
+  // Serial.setDebugOutput(true); // So as you can use printf
   Serial.println("Setting Up..."); 
 
-  // setupI2C();
+  setupI2C();
   // Join I2C bus as slave with address 0x20 Arduino 1
   // or 0x21 for Arduino 2
   // rPiLink.init(I2C_DEV_ADDR);
@@ -58,10 +57,6 @@ void setup()
   setupButtons();
 
   setupMotors();
-}
-
-float floatMap(float x, float in_min, float in_max, float out_min, float out_max) {
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 void loop() {
@@ -86,14 +81,14 @@ void loop() {
     // indexMotor.encoder.resetEncoder();
   }
 
-  // if (digitalRead(BUTTON_PIN2) == LOW) {
-  //   rPiLink.buffer.pinkMotor = 200;
-  // }
-  // else if (digitalRead(BUTTON_PIN3) == LOW) {
-  //   rPiLink.buffer.pinkMotor = -200;
-  // } else {
-  //   rPiLink.buffer.pinkMotor = 0;
-  // }
+  if (digitalRead(BUTTON_PIN2) == LOW) {
+    rPiLink.buffer.pinkMotor = 200;
+  }
+  else if (digitalRead(BUTTON_PIN4) == LOW) {
+    rPiLink.buffer.pinkMotor = -200;
+  } else {
+    rPiLink.buffer.pinkMotor = 0;
+  }
   
   // Check if button A is pressed
   // if (rPiLink.buffer.builtinDioValues[0] == HIGH) {

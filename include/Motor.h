@@ -44,8 +44,7 @@ class Motor
 
   private:
     // Motor ports
-    uint8_t in1Port_;
-    uint8_t in2Port_;
+    uint8_t pinGroup_;
     uint8_t mode_;
 
      int DBSpeed_ = 0;
@@ -60,7 +59,7 @@ class Motor
 
     void printPort() {
       if (count > 1000) {
-        Serial.print("Ports "); Serial.print(in1Port_); Serial.print(","); Serial.print(in2Port_);Serial.print(": ");
+        Serial.print("Ports "); Serial.print(motorPinGroup[pinGroup_].motorIN1); Serial.print(","); Serial.print(motorPinGroup[pinGroup_].motorIN2);Serial.print(": ");
         count = 0;
       }  
       count += 1; 
@@ -68,7 +67,7 @@ class Motor
 
     void printSpeed() {
       if (count > 1000) {
-        Serial.print("Ports "); Serial.print(in1Port_); Serial.print(", ");Serial.print("Speed "); Serial.println(DBSpeed_);
+        Serial.print("Ports "); Serial.print(motorPinGroup[pinGroup_].motorIN1); Serial.print(", ");Serial.print("Speed "); Serial.println(DBSpeed_);
         count = 0;
       }  
       count += 1; 

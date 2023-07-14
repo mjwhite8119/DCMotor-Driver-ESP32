@@ -27,14 +27,14 @@ Motor::Motor(uint8_t pinGroup, uint8_t mode)
       digitalWrite(motorPinGroup[pinGroup].motorIN1, LOW);
       digitalWrite(motorPinGroup[pinGroup].motorIN2, LOW);
     }
-    
+    pinGroup_ = pinGroup;
   }  
 
 
 void Motor::init() {
   Serial.print("Motor initiated on "); printPort(); Serial.println("");
   encoder.init();
-  
+
   encoder.resetEncoder();
   Serial.print("Encoder "); encoder.printPort(); Serial.println("");
 }
@@ -46,38 +46,38 @@ void Motor::init() {
   Stop             HIGH              HIGH 
 */ 
 void Motor::applyPower(int16_t speed){
-  int16_t continuous_position = encoder.readEncoder();
+  // int16_t continuous_position = encoder.readEncoder();
   
-  DBSpeed_ = applyDeadband(speed, 20);
+  DBSpeed_ = applyDeadband(speed, 100);
   if (DBSpeed_ > 400) {DBSpeed_ = 0;} // Take care of random values 
   
   if (DBSpeed_ == 0) {
-    digitalWrite(in1Port_, LOW);
-    digitalWrite(in2Port_, LOW);
+    digitalWrite(motorPinGroup[pinGroup_].motorIN1, LOW);
+    digitalWrite(motorPinGroup[pinGroup_].motorIN2, LOW);
     encoder.direction = STOPPED;
     // Serial.print("Flexing SPEED 0 ");encoder.printInfo();
   }
   else if( DBSpeed_ > 0) {
-    digitalWrite(in1Port_, HIGH);
-    digitalWrite(in2Port_, LOW);
+    digitalWrite(motorPinGroup[pinGroup_].motorIN1, HIGH);
+    digitalWrite(motorPinGroup[pinGroup_].motorIN2, LOW);
     encoder.direction = FORWARD;
-    // printPort(); printSpeed();
-    Serial.print("Flexing ");encoder.printInfo();
-    Serial.println(continuous_position);
+    printSpeed();
+    // Serial.print("Flexing ");
+    encoder.printInfo();
   }
   else {
-    digitalWrite(in1Port_, LOW);
-    digitalWrite(in2Port_, HIGH);
+    digitalWrite(motorPinGroup[pinGroup_].motorIN1, LOW);
+    digitalWrite(motorPinGroup[pinGroup_].motorIN2, HIGH);
     encoder.direction = REVERSE;
-    printPort(); printSpeed();
-    Serial.print("Extending "); encoder.printInfo();
-    Serial.println(continuous_position);
+    printSpeed();
+    // Serial.print("Extending "); 
+    encoder.printInfo();
   }
 }
 
 void Motor::applyPWMPower(int16_t speed) {
 
-  int16_t continuous_position = encoder.readEncoder();
+  // int16_t continuous_position = encoder.readEncoder();
 
   // Don't try and move unless we have at least 100 PWM
   DBSpeed_ = applyDeadband(speed, 100);

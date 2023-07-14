@@ -70,7 +70,7 @@ static struct DRAM_ATTR MotorPins {
 // Define the motor mode here!
 #define DIGITAL 0
 #define PWM 1
-#define MOTOR_MODE PWM
+#define MOTOR_MODE DIGITAL
 
 // Define buttons
 #define BUTTON_PIN1 12 // ADC

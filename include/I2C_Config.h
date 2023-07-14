@@ -7,6 +7,9 @@
 #include "Wire.h"
 #include "shmem_buffer.h"
 #include "ESP32RPiSlave.h"
+#ifndef WireSlave
+  #include <WireSlave.h>
+#endif
 
 // Addresses for esp32s
 #define I2C_DEV_ADDR 0x55
@@ -14,42 +17,55 @@
 #define I2C_SDA 21
 #define I2C_SCL 22
 
+int howManyBytesReceived;
+uint8_t registerCode;
+
 // Buffer and delay time
 ESP32RPiSlave<Data, 20> rPiLink;
 
+int i=0;
+// Outgoing to the wire
 void onRequest(){
+
   // Wire.print(i++);
   // Wire.print(" Packets.");
-  // Serial.println("onRequest");
-  rPiLink.transmit();
+  Serial.println("onRequest");
+  Serial.println(rPiLink.transmit());
+  Wire.print(rPiLink.transmit());
 }
 
+// Incoming from the wire
 void onReceive(int len){
-  rPiLink.receive(len);
-  // Serial.printf("onReceive[%d]: ", len);
-  // while(Wire.available()){
-  //   Serial.write(Wire.read());
-  // }
-  // Serial.println();
+  
+  // rPiLink.receive(len);
+
+  Serial.printf("onReceive[%d]: ", len);
+  while(Wire.available()){
+    Serial.print(Wire.read());
+  }
+  Serial.println();
 }
 
 void setupI2C() {
-  // Join I2C bus as slave with address 0x20 Arduino 1
-  // or 0x21 for Arduino 2
-
+ 
   // rPiLink.init(I2C_DEV_ADDR);
   pinMode(I2C_SDA, INPUT_PULLUP);
   pinMode(I2C_SCL, INPUT_PULLUP);
-  
-  Wire.onReceive(onReceive);
-  Wire.onRequest(onRequest);
-  Wire.begin(I2C_DEV_ADDR, I2C_SDA, I2C_SCL);
 
-// #if CONFIG_IDF_TARGET_ESP32
-//   char message[64];
-//   snprintf(message, 64, "%u Packets.", i++);
-//   Wire.slaveWrite((uint8_t *)message, strlen(message));
-// #endif
+  // Join I2C bus as slave with address 0x20 Arduino 1
+  // Use the defaults for SDA and SCL
+  bool ready = Wire.begin((uint8_t)I2C_DEV_ADDR);
+  
+  Wire.onReceive(onReceive); // receive register value
+  Wire.onRequest(onRequest); // send register value
+  
+  Serial.println("Setup I2C");
+
+#if CONFIG_IDF_TARGET_ESP32
+  char message[64];
+  snprintf(message, 64, "%u Packets.", i++);
+  Wire.slaveWrite((uint8_t *)message, strlen(message));
+#endif
 }
 
 void i2cScan() {
