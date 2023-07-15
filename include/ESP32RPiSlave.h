@@ -52,7 +52,8 @@
 template <class BufferType, unsigned int pi_delay_us>
   class ESP32RPiSlave //: public PololuTWISlave
 {
-private:
+  public:
+
   uint8_t index;
   bool index_set = 0;
   uint8_t i2c_write_length = 0;
@@ -83,8 +84,6 @@ private:
     i2c_write_length = 0;
   }
 
-public:
-
   BufferType buffer;
 
   void updateBuffer()
@@ -107,25 +106,34 @@ public:
     sei();
   }
 
-  virtual void receive(uint8_t b)
+  virtual void receive(uint8_t len)
   {
     piDelay();
-    if(!index_set)
-    {
-      updateI2CBuffer();
-      index = b;
-      index_set = true;
-    }
-    else
-    {
+    // if(!index_set)
+    // {
+    //   updateI2CBuffer();
+    //   index = b;
+    //   index_set = true;
+    // }
+    // else
+    // {
+
+      index = len;
       // Wrap writes at the end of the buffer
       if(i2c_write_length > sizeof(i2c_write_buffer))
         i2c_write_length = 0;
 
       // Write the data to the buffer
-      i2c_write_buffer[i2c_write_length] = b;
+      i2c_write_buffer[i2c_write_length] = len;
       i2c_write_length ++;
-    }
+    // }
+  }
+
+  virtual void writeBuffer()
+  {
+    piDelay();
+    // Wire.slaveWrite((uint8_t *)message, strlen(message));
+    Wire.slaveWrite((uint8_t *)&i2c_read_buffer, index++);
   }
 
   virtual uint8_t transmit()

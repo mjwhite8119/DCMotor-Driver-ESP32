@@ -23,27 +23,35 @@ uint8_t registerCode;
 // Buffer and delay time
 ESP32RPiSlave<Data, 20> rPiLink;
 
-int i=0;
+int request_counter=0;
 // Outgoing to the wire
 void onRequest(){
 
-  // Wire.print(i++);
-  // Wire.print(" Packets.");
+  Wire.print(request_counter++);
+  Wire.print(" Packets.");
   Serial.println("onRequest");
-  Serial.println(rPiLink.transmit());
+
+  rPiLink.writeBuffer();
+
+  // Serial.println(rPiLink.transmit());
   Wire.print(rPiLink.transmit());
 }
 
 // Incoming from the wire
 void onReceive(int len){
   
-  // rPiLink.receive(len);
+  Serial.printf("onReceive[%d]: ", len);Serial.println();
 
-  Serial.printf("onReceive[%d]: ", len);
-  while(Wire.available()){
-    Serial.print(Wire.read());
-  }
-  Serial.println();
+  rPiLink.updateI2CBuffer();
+
+  rPiLink.receive(len);
+
+  rPiLink.finalizeI2CWrites();
+
+  // while(Wire.available()){
+  //   Serial.print(Wire.read());
+  // }
+  Serial.println(rPiLink.buffer.firmwareIdent);
 }
 
 void setupI2C() {
@@ -63,7 +71,7 @@ void setupI2C() {
 
 #if CONFIG_IDF_TARGET_ESP32
   char message[64];
-  snprintf(message, 64, "%u Packets.", i++);
+  snprintf(message, 64, "%u Packets.", request_counter++);
   Wire.slaveWrite((uint8_t *)message, strlen(message));
 #endif
 }
