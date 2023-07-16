@@ -55,7 +55,7 @@ void Motor::applyPower(int16_t speed){
     digitalWrite(motorPinGroup[pinGroup_].motorIN1, LOW);
     digitalWrite(motorPinGroup[pinGroup_].motorIN2, LOW);
     encoder.direction = STOPPED;
-    // Serial.print("Flexing SPEED 0 ");encoder.printInfo();
+    // encoder.printInfo();
   }
   else if( DBSpeed_ > 0) {
     digitalWrite(motorPinGroup[pinGroup_].motorIN1, HIGH);
@@ -63,7 +63,7 @@ void Motor::applyPower(int16_t speed){
     encoder.direction = FORWARD;
     printSpeed();
     // Serial.print("Flexing ");
-    encoder.printInfo();
+    // encoder.printInfo();
   }
   else {
     digitalWrite(motorPinGroup[pinGroup_].motorIN1, LOW);
@@ -71,7 +71,7 @@ void Motor::applyPower(int16_t speed){
     encoder.direction = REVERSE;
     printSpeed();
     // Serial.print("Extending "); 
-    encoder.printInfo();
+    // encoder.printInfo();
   }
 }
 

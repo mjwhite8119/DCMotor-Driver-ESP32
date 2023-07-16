@@ -27,14 +27,15 @@ int request_counter=0;
 // Outgoing to the wire
 void onRequest(){
 
-  Wire.print(request_counter++);
-  Wire.print(" Packets.");
-  Serial.println("onRequest");
+  // Wire.print(request_counter++);
+  // Wire.print(" Packets.");
+  // Serial.println("onRequest");
 
-  rPiLink.writeBuffer();
+  // rPiLink.writeBuffer();
 
   // Serial.println(rPiLink.transmit());
-  Wire.print(rPiLink.transmit());
+  // rPiLink.createBuffer();
+  rPiLink.transmit();
 }
 
 // Incoming from the wire
@@ -51,7 +52,7 @@ void onReceive(int len){
   // while(Wire.available()){
   //   Serial.print(Wire.read());
   // }
-  Serial.println(rPiLink.buffer.firmwareIdent);
+  Serial.println(rPiLink.buffer.Motor1);
 }
 
 void setupI2C() {
@@ -70,9 +71,10 @@ void setupI2C() {
   Serial.println("Setup I2C");
 
 #if CONFIG_IDF_TARGET_ESP32
-  char message[64];
-  snprintf(message, 64, "%u Packets.", request_counter++);
-  Wire.slaveWrite((uint8_t *)message, strlen(message));
+  // char message[64];
+  // snprintf(message, 64, "%u Packets.", request_counter++);
+  // Wire.slaveWrite((uint8_t *)&rPiLink.buffer, 32);
+  rPiLink.init();
 #endif
 }
 

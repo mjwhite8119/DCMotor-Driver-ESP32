@@ -16,9 +16,6 @@ class MagEncoder
 {  
    public:
 
-    // Mutex for protecting critical code in interrupts
-    portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
-
     MagEncoder() {} // Default constructor  
 
     // Constructor to connect encoder GPIO pins to microcontroller
@@ -45,26 +42,16 @@ class MagEncoder
       
     void init();
 
-    // Instance members to get encoder ticks. Called from ISR
-
-    // Checks encoder A
-    void IRAM_ATTR encoderAFired_();
-
-    // // Checks encoder B
-    void IRAM_ATTR encoderBFired_();
-
     void resetEncoder() {
       ticks = 0;
       printPort();Serial.println(" Encoder reset");
     }
 
-    int32_t readEncoder() {
-      return ticks;
-    }
+    int32_t IRAM_ATTR getCounts();
 
     void printInfo() {
       if (count > 1000) {
-        Serial.print("Ticks:");Serial.println(ticks);   
+        Serial.print("Ticks:");Serial.println(getCounts());   
         count = 0;
       }  
       count += 1; 
@@ -75,10 +62,19 @@ class MagEncoder
       Serial.print("Port ");Serial.print(motorPinGroup[pinGroup_].encoderA);
     }
 
-
     static MagEncoder * instances [2];
 
   private:
 
     uint8_t pinGroup_;
+    // Mutex for protecting critical code in interrupts
+    portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
+
+    // Instance members to get encoder ticks. Called from ISR
+
+    // Checks encoder A
+    void IRAM_ATTR encoderAFired_();
+
+    // // Checks encoder B
+    void IRAM_ATTR encoderBFired_();
 };    

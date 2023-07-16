@@ -6,24 +6,29 @@
 #pragma once
 #include <stdint.h>
 
-#define FIRMWARE_IDENT 126
+#define FIRMWARE_IDENT 21
 
 struct Data {
-  uint16_t ioConfig;
-  uint8_t firmwareIdent;
-  uint8_t status;
-  bool heartbeat;
-  uint8_t builtinConfig;
-  bool builtinDioValues[4];
-  int16_t extIoValues[5];
-  uint16_t analog[2];
-  int16_t pinkMotor;
-  int16_t ringMotor;
-  int16_t middleMotor;
-  int16_t indexMotor;
-  uint16_t batteryMillivolts;
-  bool resetLeftEncoder;
-  bool resetRightEncoder;
-  int16_t leftEncoder;
-  int16_t rightEncoder;
+  // uint8_t firmwareIdent;
+  // uint8_t status;
+  // bool heartbeat;
+  // uint16_t batteryMillivolts;
+  int16_t Motor1;
+  int16_t Motor2;
+  int16_t Motor3;
+  int16_t Motor4;
+  int16_t Motor5;
+  int16_t Motor6;
+  bool resetEncoder1;
+  bool resetEncoder2;
+  bool resetEncoder3;
+  bool resetEncoder4;
+  bool resetEncoder5;
+  bool resetEncoder6;
+  int16_t Encoder1;
+  int16_t Encoder2;
+  int16_t Encoder3;
+  int16_t Encoder4;
+  int16_t Encoder5;
+  int16_t Encoder6;
 };

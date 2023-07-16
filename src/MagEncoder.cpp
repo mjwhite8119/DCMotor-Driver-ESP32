@@ -42,3 +42,10 @@ void IRAM_ATTR MagEncoder::encoderBFired_() {
   portEXIT_CRITICAL_ISR(&timerMux);
 }
 
+int32_t IRAM_ATTR MagEncoder::getCounts() {
+  portENTER_CRITICAL_ISR(&timerMux);
+  int32_t tmp = ticks;
+  portEXIT_CRITICAL_ISR(&timerMux);
+  return tmp;
+}
+
