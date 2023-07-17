@@ -6,10 +6,10 @@
 #include "Motor.h"
 // #include "GameController.h"
 
-Motor Motor1 = Motor(0, MOTOR_MODE);
-// Motor Motor2 = Motor(1, MOTOR_MODE);
-// Motor Motor3 = Motor(2, MOTOR_MODE);
-// Motor Motor4 = Motor(3, MOTOR_MODE);
+Motor motor1 = Motor(0, MOTOR_MODE);
+// Motor motor2 = Motor(1, MOTOR_MODE);
+// Motor motor3 = Motor(2, MOTOR_MODE);
+// Motor motor4 = Motor(3, MOTOR_MODE);
 
 int readPot() {
   int analogValue = analogRead(ANALOG_PIN1); 
@@ -20,16 +20,16 @@ int readPot() {
 
 void setupMotors() {
   
-  Motor1.init();
+  motor1.init();
   // Motor2.init();
   // Motor3.init();
   // Motor4.init();
 
   // Setup the communication links
-  rPiLink.buffer.Motor1 = 0;
-  rPiLink.buffer.Motor2 = 0;
-  rPiLink.buffer.Motor3 = 0;
-  rPiLink.buffer.Motor4 = 0;
+  rPiLink.buffer.motor1 = 0;
+  rPiLink.buffer.motor2 = 0;
+  rPiLink.buffer.motor3 = 0;
+  rPiLink.buffer.motor4 = 0;
 }
 
 void setupButtons() {
@@ -68,41 +68,44 @@ void loop() {
   rPiLink.updateBuffer();
   // Constantly write the firmware ident
 
-  rPiLink.buffer.Motor1 = 0;
-  rPiLink.buffer.Motor2 = 1;
-  rPiLink.buffer.Motor3 = 2;
-  rPiLink.buffer.Motor4 = 3;
-  rPiLink.buffer.Motor5 = 4;
-  rPiLink.buffer.Motor6 = 5;
+  // rPiLink.buffer.motor1 = 1;
+  // rPiLink.buffer.motor2 = 2;
+  // rPiLink.buffer.motor3 = 3;
+  // rPiLink.buffer.motor4 = 4;
+  // rPiLink.buffer.motor5 = 5;
+  // rPiLink.buffer.motor6 = 8;
 
-  rPiLink.buffer.Encoder1 = 200;
-  rPiLink.buffer.Encoder2 = 201;
-  rPiLink.buffer.Encoder3 = 202;
+  // rPiLink.buffer.encoder1 = 29345;
+  // rPiLink.buffer.encoder2 = 201;
+  // rPiLink.buffer.encoder3 = 202;
+  // rPiLink.buffer.encoder4 = 255;
+  // rPiLink.buffer.encoder5 = 256;
+  // rPiLink.buffer.encoder6 = 23777;
 
   // rPiLink.buffer.firmwareIdent = FIRMWARE_IDENT;
   // rPiLink.buffer.status = 1;
 
   int speed = readPot();
 
-  rPiLink.buffer.Motor1 = speed;
+  rPiLink.buffer.motor1 = speed;
 
   // Update the built-ins.  These are 4 boolean values
   // rPiLink.buffer.builtinDioValues[0] = digitalRead(BUTTON_PIN);
 
   if (digitalRead(BUTTON_PIN3) == LOW) {
-    Motor1.encoder.resetEncoder();
+    motor1.encoder.resetEncoder();
     // Motor2.encoder.resetEncoder();
     // Motor3.encoder.resetEncoder();
     // Motor4.encoder.resetEncoder();
   }
 
   if (digitalRead(BUTTON_PIN2) == LOW) {
-    rPiLink.buffer.Motor1 = 200;
+    rPiLink.buffer.motor1 = 200;
   }
   else if (digitalRead(BUTTON_PIN4) == LOW) {
-    rPiLink.buffer.Motor1 = -200;
+    rPiLink.buffer.motor1 = -200;
   } else {
-    rPiLink.buffer.Motor1 = 0;
+    rPiLink.buffer.motor1 = 0;
   }
   
   // Check if button A is pressed
@@ -119,9 +122,9 @@ void loop() {
   // }
 
   if (MOTOR_MODE == PWM ) {
-    Motor1.applyPWMPower(rPiLink.buffer.Motor1);
+    motor1.applyPWMPower(rPiLink.buffer.motor1);
   } else {
-    Motor1.applyPower(rPiLink.buffer.Motor1);
+    motor1.applyPower(rPiLink.buffer.motor1);
   }
   
   
@@ -140,8 +143,6 @@ void loop() {
   //   Motor2.encoder.resetEncoder();
   // }
 
-  // rPiLink.buffer.leftEncoder = encoders.getCountsLeft();
-  // rPiLink.buffer.rightEncoder = encoders.getCountsRight();
 
   // Motor1.encoder.readEncoder();
   // Motor2.encoder.readEncoder();

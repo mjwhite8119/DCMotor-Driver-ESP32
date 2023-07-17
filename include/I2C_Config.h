@@ -24,17 +24,10 @@ uint8_t registerCode;
 ESP32RPiSlave<Data, 20> rPiLink;
 
 int request_counter=0;
+
 // Outgoing to the wire
 void onRequest(){
-
-  // Wire.print(request_counter++);
-  // Wire.print(" Packets.");
-  // Serial.println("onRequest");
-
-  // rPiLink.writeBuffer();
-
-  // Serial.println(rPiLink.transmit());
-  // rPiLink.createBuffer();
+  Serial.println("onRequest");
   rPiLink.transmit();
 }
 
@@ -45,14 +38,31 @@ void onReceive(int len){
 
   rPiLink.updateI2CBuffer();
 
-  rPiLink.receive(len);
+  rPiLink.i2c_write_length = 0;
+  bool first_byte = true;
+  while(Wire.available()){
+    if (first_byte) {
+      Wire.read();
+      first_byte = false;  
+    }
+    rPiLink.receive();
+  }
+
+  rPiLink.printWriteBuffer();
 
   rPiLink.finalizeI2CWrites();
+  rPiLink.updateBuffer();
 
-  // while(Wire.available()){
-  //   Serial.print(Wire.read());
-  // }
-  Serial.println(rPiLink.buffer.Motor1);
+  rPiLink.printBuffer();
+  
+  Serial.println("Motors");
+  Serial.println(rPiLink.buffer.motor1);
+  Serial.println(rPiLink.buffer.motor2);
+  Serial.println(rPiLink.buffer.motor6);
+  Serial.println("Encoders");
+  Serial.println(rPiLink.buffer.encoder1); 
+  Serial.println(rPiLink.buffer.encoder2);
+  Serial.println(rPiLink.buffer.encoder6);
 }
 
 void setupI2C() {

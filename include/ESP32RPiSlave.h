@@ -57,10 +57,7 @@ template <class BufferType, unsigned int pi_delay_us>
   uint8_t index;
   bool index_set = 0;
   uint8_t i2c_write_length = 0;
-  uint8_t i2c_write_buffer[16];
-
-  const uint8_t buffer_length = 32;
-  uint8_t i2c_transmit_buffer[32];
+  uint8_t i2c_write_buffer[24];
 
   BufferType i2c_read_buffer;
   BufferType staging_buffer;
@@ -82,7 +79,7 @@ template <class BufferType, unsigned int pi_delay_us>
 
     for(uint8_t i=0; i < i2c_write_length; i++)
     {
-      ((uint8_t *)&staging_buffer)[i+index] = i2c_write_buffer[i];
+      ((uint8_t *)&staging_buffer)[i] = i2c_write_buffer[i];
     }
     i2c_write_length = 0;
   }
@@ -109,58 +106,38 @@ template <class BufferType, unsigned int pi_delay_us>
     sei();
   }
 
-  virtual void receive(uint8_t len)
+  virtual void receive()
   {
     piDelay();
-    // if(!index_set)
-    // {
-    //   updateI2CBuffer();
-    //   index = b;
-    //   index_set = true;
-    // }
-    // else
-    // {
-
-      index = len;
-      // Wrap writes at the end of the buffer
-      if(i2c_write_length > sizeof(i2c_write_buffer))
-        i2c_write_length = 0;
+    
+      // // Wrap writes at the end of the buffer
+      // if(i2c_write_length > sizeof(i2c_write_buffer))
+      //   i2c_write_length = 0;
 
       // Write the data to the buffer
-      i2c_write_buffer[i2c_write_length] = len;
+      // int8_t tmp = Wire.read();
+      // Serial.print(tmp, HEX);
+      i2c_write_buffer[i2c_write_length] = Wire.read();
       i2c_write_length ++;
     // }
-  }
-
-  virtual void createBuffer()
-  {
-    piDelay();
-    uint8_t i;
-    // Wire.slaveWrite((uint8_t *)message, strlen(message));
-    // Wire.slaveWrite((uint8_t *)&i2c_read_buffer, index++);
-    for(i=0; i < sizeof(BufferType); i++)
-    {
-      i2c_transmit_buffer[i] = ((uint8_t *)&buffer)[i];
-    }
   }
 
   virtual void transmit()
   {
     piDelay();
+    Serial.println("transmit");
     uint8_t i;
     for(i=0; i < sizeof(BufferType); i++)
-    {
+    { 
       Serial.print(((uint8_t *)&i2c_read_buffer)[i]);
-      Wire.print(((uint8_t *)&i2c_read_buffer)[i]);
+      Wire.write(((uint8_t *)&i2c_read_buffer)[i]);
     }
     Serial.println();
+    // Serial.println(i2c_read_buffer.encoder1);
+    // Serial.println(i2c_read_buffer.encoder2);
+    // // Serial.println(i2c_read_buffer.encoder3);
+    // Serial.println(i2c_read_buffer.encoder6);
   }
-
-  // virtual uint8_t transmit()
-  // {
-  //   piDelay();
-  //   return ((uint8_t *)&i2c_read_buffer)[index++];
-  // }
 
   virtual void start()
   {
@@ -173,17 +150,32 @@ template <class BufferType, unsigned int pi_delay_us>
     finalizeI2CWrites();
   }
 
+  // virtual int16_t getEncoder1() {
+  //   int16_t num = ((uint8_t *)&i2c_read_buffer)[16] | (uint8_t *)&i2c_read_buffer)[17] << 8
+  //   return num;
+  // }
+
+  virtual void printWriteBuffer() {
+    uint8_t i;
+    for(i=0; i < sizeof(BufferType); i++)
+    { 
+      Serial.print(((uint8_t *)&i2c_write_buffer)[i], HEX);
+    }
+    Serial.println();
+  }
+
+  virtual void printBuffer() {
+    uint8_t i;
+    for(i=0; i < sizeof(BufferType); i++)
+    { 
+      Serial.print(((uint8_t *)&buffer)[i], HEX);
+    }
+    Serial.println();
+  }
+
   /* Initialize the slave on a given address. */
   void init()
   {
     Wire.slaveWrite((uint8_t *)&i2c_read_buffer, sizeof(BufferType));
-    // PololuTWISlave::init(address, *this);
-
-    // pinMode(I2C_SDA, INPUT_PULLUP);
-    // pinMode(I2C_SCL, INPUT_PULLUP);
-    
-    // Wire.onReceive(receive);
-    // Wire.onRequest(transmit);
-    // Wire.begin((uint8_t)address);
   }
 };
