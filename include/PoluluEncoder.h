@@ -12,14 +12,14 @@
 #define FORWARD 1
 #define REVERSE 0
 
-class MagEncoder
+class PoluluEncoder
 {  
    public:
 
-    MagEncoder() {} // Default constructor  
+    PoluluEncoder() {} // Default constructor  
 
     // Constructor to connect encoder GPIO pins to microcontroller
-    MagEncoder(uint8_t pinGroup);
+    PoluluEncoder(uint8_t pinGroup);
 
     // Ticks of the right and left encoder. This is volatile so 
     // that it doesn't interfere with the rest of the code.
@@ -30,14 +30,14 @@ class MagEncoder
     // Encoder interrupt routines
     static void encoderISRA ()
     {
-      if (MagEncoder::instances [0] != NULL)
-        MagEncoder::instances [0]->encoderAFired_();
+      if (PoluluEncoder::instances [0] != NULL)
+        PoluluEncoder::instances [0]->encoderAFired_();
     } 
     
     static void encoderISRB ()
     {
-      if (MagEncoder::instances [1] != NULL)
-        MagEncoder::instances [1]->encoderBFired_();
+      if (PoluluEncoder::instances [1] != NULL)
+        PoluluEncoder::instances [1]->encoderBFired_();
     }
       
     void init();
@@ -62,7 +62,7 @@ class MagEncoder
       Serial.print("Port ");Serial.print(motorPinGroup[pinGroup_].encoderA);
     }
 
-    static MagEncoder * instances [2];
+    static PoluluEncoder * instances [2];
 
   private:
 

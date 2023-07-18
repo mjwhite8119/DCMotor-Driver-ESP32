@@ -1,9 +1,9 @@
-#include "MagEncoder.h"
+#include "PoluluEncoder.h"
 
-MagEncoder * MagEncoder::instances [2] = { NULL, NULL };
+PoluluEncoder * PoluluEncoder::instances [2] = { NULL, NULL };
 
 // Constructor to connect encoder GPIO pins to microcontroller
-MagEncoder::MagEncoder(uint8_t pinGroup)
+PoluluEncoder::PoluluEncoder(uint8_t pinGroup)
   :pinGroup_(pinGroup)
 {
   // Switch on interrupts
@@ -17,7 +17,7 @@ MagEncoder::MagEncoder(uint8_t pinGroup)
   Interrupts cannot be attached in the constructor since the interrupt handler 
   may not have been started. 
 */
-void MagEncoder::init() {
+void PoluluEncoder::init() {
   pinMode(motorPinGroup[pinGroup_].encoderA, INPUT); //  Left encoder, channel A
   pinMode(motorPinGroup[pinGroup_].encoderB, INPUT); //  Left encoder, channel B
   
@@ -28,7 +28,7 @@ void MagEncoder::init() {
   instances [1] = this;
 }
 
-void IRAM_ATTR MagEncoder::encoderAFired_() {
+void IRAM_ATTR PoluluEncoder::encoderAFired_() {
   // ticks is 4 bytes so make sure that the write is not interupted
   portENTER_CRITICAL_ISR(&timerMux);
   if (direction == FORWARD) {
@@ -39,7 +39,7 @@ void IRAM_ATTR MagEncoder::encoderAFired_() {
   portEXIT_CRITICAL_ISR(&timerMux);
 }
 
-void IRAM_ATTR MagEncoder::encoderBFired_() {
+void IRAM_ATTR PoluluEncoder::encoderBFired_() {
   // ticks is 4 bytes so make sure that the write is not interupted
   portENTER_CRITICAL_ISR(&timerMux);
   if (direction == FORWARD) {
@@ -50,7 +50,7 @@ void IRAM_ATTR MagEncoder::encoderBFired_() {
   portEXIT_CRITICAL_ISR(&timerMux);
 }
 
-int32_t IRAM_ATTR MagEncoder::getCounts() {
+int32_t IRAM_ATTR PoluluEncoder::getCounts() {
   portENTER_CRITICAL_ISR(&timerMux);
   int32_t tmp = ticks;
   portEXIT_CRITICAL_ISR(&timerMux);
