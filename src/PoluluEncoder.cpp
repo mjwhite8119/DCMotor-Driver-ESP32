@@ -15,11 +15,12 @@ PoluluEncoder::PoluluEncoder(uint8_t pinGroup)
 
 /*
   Interrupts cannot be attached in the constructor since the interrupt handler 
-  may not have been started. 
+  may not have been started. With one pin attached you get 6 ticks per/revolution.
+  This will be doubled to 12 if both pins are attached.
 */
 void PoluluEncoder::init() {
-  pinMode(motorPinGroup[pinGroup_].encoderA, INPUT); //  Left encoder, channel A
-  pinMode(motorPinGroup[pinGroup_].encoderB, INPUT); //  Left encoder, channel B
+  pinMode(motorPinGroup[pinGroup_].encoderA, INPUT); //  channel A
+  pinMode(motorPinGroup[pinGroup_].encoderB, INPUT); //  channel B
   
   attachInterrupt (motorPinGroup[pinGroup_].encoderA, encoderISRA, CHANGE);  // Left encoder
   instances [0] = this; 

@@ -9,8 +9,12 @@
   #include <Config.h>
 #endif
 
-#ifndef MagEncoder
-  #include "MagEncoder.h"
+#ifndef PoluluEncoder
+  #include "PoluluEncoder.h"
+#endif
+
+#ifndef AS5600Encoder
+  #include "AS5600Encoder.h"
 #endif
 
 #define STOPPED 2
@@ -27,7 +31,8 @@ class Motor
     Motor(uint8_t pinGroup, uint8_t mode=0);
 
     // Encoder attached to the motor
-    MagEncoder encoder;
+    // PoluluEncoder encoder;
+    AS5600Encoder encoder;
 
     // PMW for motors
     const int channel_0 = 0;

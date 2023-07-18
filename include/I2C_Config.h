@@ -65,7 +65,11 @@ void onReceive(int len){
   Serial.println(rPiLink.buffer.encoder6);
 }
 
-void setupI2C() {
+void setupI2CServer() {
+
+}
+
+void setupI2CClient() {
  
   // rPiLink.init(I2C_DEV_ADDR);
   pinMode(I2C_SDA, INPUT_PULLUP);
@@ -81,9 +85,6 @@ void setupI2C() {
   Serial.println("Setup I2C");
 
 #if CONFIG_IDF_TARGET_ESP32
-  // char message[64];
-  // snprintf(message, 64, "%u Packets.", request_counter++);
-  // Wire.slaveWrite((uint8_t *)&rPiLink.buffer, 32);
   rPiLink.init();
 #endif
 }

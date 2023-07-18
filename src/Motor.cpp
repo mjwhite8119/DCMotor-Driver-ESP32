@@ -75,8 +75,6 @@ void Motor::applyPower(int16_t speed){
 
 void Motor::applyPWMPower(int16_t speed) {
 
-  // int16_t continuous_position = encoder.readEncoder();
-
   // Don't try and move unless we have at least 100 PWM
   DBSpeed_ = applyDeadband(speed, 100);
   if (DBSpeed_ > MAX_DUTY_CYCLE) {
@@ -103,6 +101,6 @@ void Motor::applyPWMPower(int16_t speed) {
     encoder.direction = REVERSE;
 
     printPort(); printSpeed();
-    Serial.print("Finger extended "); encoder.printInfo();
+    // Serial.print("Finger extended "); encoder.printInfo();
   }
 }

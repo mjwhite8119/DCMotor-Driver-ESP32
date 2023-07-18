@@ -72,10 +72,9 @@ void setup()
   // Serial.setDebugOutput(true); // So as you can use printf
   Serial.println("Setting Up..."); 
 
-  setupI2C();
-  // Join I2C bus as slave with address 0x20 Arduino 1
-  // or 0x21 for Arduino 2
-  // rPiLink.init(I2C_DEV_ADDR);
+  setupI2CClient();
+
+  // setupI2CServer();
 
   // RPi wants the status to be 1 otherwise it will report a brownout.
   // rPiLink.buffer.status = 1;
