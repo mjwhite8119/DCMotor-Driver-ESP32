@@ -46,9 +46,7 @@ void Motor::init() {
   Stop             HIGH              HIGH 
 */ 
 void Motor::applyPower(int16_t speed){
-  // int16_t continuous_position = encoder.readEncoder();
-  
-  DBSpeed_ = applyDeadband(speed, 100);
+  DBSpeed_ = applyDeadband(speed, 10);
   if (DBSpeed_ > 400) {DBSpeed_ = 0;} // Take care of random values 
   
   if (DBSpeed_ == 0) {
@@ -61,17 +59,17 @@ void Motor::applyPower(int16_t speed){
     digitalWrite(motorPinGroup[pinGroup_].motorIN1, HIGH);
     digitalWrite(motorPinGroup[pinGroup_].motorIN2, LOW);
     encoder.direction = FORWARD;
-    printSpeed();
+    // printSpeed();
     // Serial.print("Flexing ");
-    // encoder.printInfo();
+    encoder.printInfo();
   }
   else {
     digitalWrite(motorPinGroup[pinGroup_].motorIN1, LOW);
     digitalWrite(motorPinGroup[pinGroup_].motorIN2, HIGH);
     encoder.direction = REVERSE;
-    printSpeed();
+    // printSpeed();
     // Serial.print("Extending "); 
-    // encoder.printInfo();
+    encoder.printInfo();
   }
 }
 

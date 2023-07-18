@@ -31,14 +31,22 @@ void MagEncoder::init() {
 void IRAM_ATTR MagEncoder::encoderAFired_() {
   // ticks is 4 bytes so make sure that the write is not interupted
   portENTER_CRITICAL_ISR(&timerMux);
-  ticks++;
+  if (direction == FORWARD) {
+    ticks++;
+  } else {
+    ticks--;
+  }
   portEXIT_CRITICAL_ISR(&timerMux);
 }
 
 void IRAM_ATTR MagEncoder::encoderBFired_() {
   // ticks is 4 bytes so make sure that the write is not interupted
   portENTER_CRITICAL_ISR(&timerMux);
-  ticks--;
+  if (direction == FORWARD) {
+    ticks++;
+  } else {
+    ticks--;
+  }
   portEXIT_CRITICAL_ISR(&timerMux);
 }
 
