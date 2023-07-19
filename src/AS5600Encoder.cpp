@@ -13,5 +13,10 @@ AS5600Encoder::AS5600Encoder(uint8_t pinGroup)
 */
 void AS5600Encoder::init() {
   pinMode(motorPinGroup[pinGroup_].encoderA, INPUT); //  channel A
-  pinMode(motorPinGroup[pinGroup_].encoderB, INPUT); //  channel B
+  // pinMode(motorPinGroup[pinGroup_].encoderB, INPUT); //  channel B
+}
+
+int32_t AS5600Encoder::getCounts() {
+  ticks = analogRead(motorPinGroup[pinGroup_].encoderA);
+  return ticks;
 }

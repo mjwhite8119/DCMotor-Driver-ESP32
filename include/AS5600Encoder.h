@@ -37,12 +37,11 @@ class AS5600Encoder
     int32_t getCounts();
 
     void printInfo() {
-      if (count > 1000) {
+      if (count > 10000) {
         Serial.print("Ticks:");Serial.println(getCounts());   
         count = 0;
       }  
       count += 1; 
-         
     }
 
     void printPort() {
