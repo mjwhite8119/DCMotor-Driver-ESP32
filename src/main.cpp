@@ -95,7 +95,7 @@ void loop() {
   // Use push buttons to control motors
   // useButtons();
 
-  // testEncoders();
+  testEncoders();
   
   // Reset the encoders
   if (digitalRead(BUTTON_PIN3) == LOW) {
