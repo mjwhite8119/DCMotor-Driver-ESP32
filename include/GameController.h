@@ -238,7 +238,7 @@ void PS3ControllerSetup() {
   // Setup PS3 Controller
   Ps3.attach(notify);
   Ps3.attachOnConnect(onConnect);
-  Ps3.begin("dc:a6:32:75:2e:ad");
+  Ps3.begin("98-b6-54-31-52-c9");
   String address = Ps3.getAddress();
 
   Serial.print("The ESP32's Bluetooth MAC address is: ");

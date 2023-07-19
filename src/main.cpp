@@ -4,7 +4,7 @@
 #include "Util.h"
 #include "I2C_Config.h"
 #include "Motor.h"
-// #include "GameController.h"
+#include "GameController.h"
 
 Motor motor1 = Motor(0, MOTOR_MODE);
 // Motor motor2 = Motor(1, MOTOR_MODE);
@@ -93,7 +93,7 @@ void loop() {
   // usePot();
 
   // Use push buttons to control motors
-  useButtons();
+  // useButtons();
 
   // testEncoders();
   
