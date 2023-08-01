@@ -9,9 +9,9 @@
   #include <Config.h>
 #endif
 
-#ifndef PoluluEncoder
-  #include "PoluluEncoder.h"
-#endif
+// #ifndef PoluluEncoder
+//   #include "PoluluEncoder.h"
+// #endif
 
 #ifndef AS5600Encoder
   #include "AS5600Encoder.h"

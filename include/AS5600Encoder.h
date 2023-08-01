@@ -8,6 +8,15 @@
   #include <Config.h>
 #endif
 
+#include <Wire.h> 
+
+#ifndef AS5600
+  #include <AS5600.h>
+#endif  
+
+// If using I2C
+// AS5600 as5600;   //  use default Wire
+
 #define STOPPED 2
 #define FORWARD 1
 #define REVERSE 0
@@ -23,14 +32,14 @@ class AS5600Encoder
 
     // Ticks of the right and left encoder. This is volatile so 
     // that it doesn't interfere with the rest of the code.
-    volatile int32_t ticks = 0;
+    volatile int32_t angle = 0;
     uint8_t direction = STOPPED;
     int count = 0;
       
     void init();
 
     void resetEncoder() {
-      ticks = 0;
+      angle = 0;
       printPort();Serial.println(" Encoder reset");
     }
 
@@ -49,6 +58,8 @@ class AS5600Encoder
     }
 
   private:
+
+    float convertRawAngleToDegrees(word newAngle);
 
     uint8_t pinGroup_;
 };    
