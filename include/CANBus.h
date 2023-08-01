@@ -7,6 +7,12 @@
 #include <ESP32CAN.h>
 #include <CAN_config.h>
 
+#include "shmem_buffer.h"
+#include "CANBuffer.h"
+
+// Buffer and delay time
+CANBuffer<Data, 20> rPiLink;
+
 CAN_device_t CAN_cfg;               // CAN Config
 unsigned long previousMillis = 0;   // will store last time a CAN Message was send
 const int interval = 1000;          // interval at which send CAN Messages (milliseconds)
@@ -64,6 +70,12 @@ void loopCANBus() {
     tx_frame.data.u8[5] = 0x05;
     tx_frame.data.u8[6] = 0x06;
     tx_frame.data.u8[7] = 0x07;
-    ESP32Can.CANWriteFrame(&tx_frame);
+    int success = ESP32Can.CANWriteFrame(&tx_frame);
+
+    if (success == 0) {
+      Serial.println("Message sent");
+    } else {
+      Serial.println("Failed!");
+    }
   }
 }
