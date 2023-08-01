@@ -9,9 +9,9 @@
   #include <Config.h>
 #endif
 
-#ifndef PoluluEncoder
-  #include "PoluluEncoder.h"
-#endif
+// #ifndef PoluluEncoder
+//   #include "PoluluEncoder.h"
+// #endif
 
 #ifndef AS5600Encoder
   #include "AS5600Encoder.h"
@@ -31,8 +31,8 @@ class Motor
     Motor(uint8_t pinGroup, uint8_t mode=0);
 
     // Encoder attached to the motor
-    PoluluEncoder encoder;
-    // AS5600Encoder encoder;
+    // PoluluEncoder encoder;
+    AS5600Encoder encoder;
 
     // PMW for motors
     const int channel_0 = 0;

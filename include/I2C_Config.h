@@ -84,6 +84,9 @@ void setupI2CClient() {
   
   Serial.println("Setup I2C");
 
+  // RPi wants the status to be 1 otherwise it will report a brownout.
+  // rPiLink.buffer.status = 1;
+
 #if CONFIG_IDF_TARGET_ESP32
   rPiLink.init();
 #endif

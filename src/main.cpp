@@ -5,6 +5,7 @@
 #include "I2C_Config.h"
 #include "Motor.h"
 #include "GameController.h"
+
 #include "CANBus.h"
 
 Motor motor1 = Motor(0, MOTOR_MODE);
@@ -63,7 +64,6 @@ void setupButtons() {
   pinMode(BUTTON_PIN4, INPUT_PULLUP);
 }
 
-
 // -------------------------------------------------- //
 // Setup and Main                                     //
 // -------------------------------------------------- //
@@ -73,28 +73,13 @@ void setup()
   // Serial.setDebugOutput(true); // So as you can use printf
   Serial.println("Setting Up..."); 
 
-  setupI2CClient();
+  // setupI2CClient();
+
+  setupCANBus();
 
   // setupI2CServer();
 
-  // Pretend the ESP32 is the Raspberry Pi by using
-  // the Pi's MAC address
-  uint8_t new_mac[8] = {0xDC,0xA6,0x32,0x75,0x2E,0xAD};
-  ps3SetBluetoothMacAddress(new_mac);
-
-  // Define Callback Function
-  Ps3.attach(notify);
-  // Define On Connection Function
-  Ps3.attachOnConnect(onConnect);
-  // Emulate console as specific MAC address (change as required)
-  // Ps3.begin("98:B6:5A:26:93:40");
-  Ps3.begin("DC:A6:32:75:2E:AD");
-  // Ps3.begin();
-  String address = Ps3.getAddress();
-  Serial.println(address);
-
-  // RPi wants the status to be 1 otherwise it will report a brownout.
-  // rPiLink.buffer.status = 1;
+  // PS3ControllerSetup();
 
   setupButtons();
 
@@ -106,14 +91,7 @@ void loop() {
   // Get the latest data including recent i2c master writes
   rPiLink.updateBuffer();
 
-  if (Ps3.isConnected()){
-    Serial.println("Connected!");
-  }
-
-  delay(3000);
-  // if (!Ps3.isConnected())
-  //   Serial.println("PS3 Not connected");
-  //   delay(2000);
+  loopCANBus();
   // Use potentiometer to control motors
   // usePot();
 

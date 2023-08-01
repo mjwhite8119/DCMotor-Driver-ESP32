@@ -244,5 +244,3 @@ void PS3ControllerSetup() {
   Serial.print("The ESP32's Bluetooth MAC address is: ");
   Serial.println(address);
 }
-
-
