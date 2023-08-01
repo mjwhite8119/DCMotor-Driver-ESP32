@@ -7,7 +7,8 @@
 #include "Motor.h"
 // #include "GameController.h"
 
-#include "CANBus.h"
+// #include "CANBus.h"
+#include "NewCanBus.h"
 
 Motor motor1 = Motor(0, MOTOR_MODE);
 // Motor motor2 = Motor(1, MOTOR_MODE);
@@ -71,6 +72,8 @@ void setupButtons() {
 void setup()
 {
   Serial.begin(115200);
+  while (!Serial);
+
   // Serial.setDebugOutput(true); // So as you can use printf
   Serial.println("Setting Up..."); 
 
@@ -92,7 +95,9 @@ void loop() {
   // Get the latest data including recent i2c master writes
   rPiLink.updateBuffer();
 
-  loopCANBus();
+  loopCANReceiver();
+
+  loopCANSender();
   // Use potentiometer to control motors
   // usePot();
 
