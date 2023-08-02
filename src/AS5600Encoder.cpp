@@ -13,6 +13,7 @@ AS5600Encoder::AS5600Encoder(uint8_t pinGroup)
 */
 void AS5600Encoder::init() {
   pinMode(motorPinGroup[pinGroup_].encoderA, INPUT); //  channel A
+  
   // pinMode(motorPinGroup[pinGroup_].encoderB, INPUT); //  channel B
   // Wire.begin();
   // //  as5600.begin(14,15);

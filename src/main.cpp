@@ -7,8 +7,7 @@
 #include "Motor.h"
 // #include "GameController.h"
 
-// #include "CANBus.h"
-#include "NewCanBus.h"
+#include "CanBus.h"
 
 Motor motor1 = Motor(0, MOTOR_MODE);
 // Motor motor2 = Motor(1, MOTOR_MODE);
@@ -48,9 +47,9 @@ void testEncoders() {
 
 void setupMotors() { 
   motor1.init();
-  // Motor2.init();
-  // Motor3.init();
-  // Motor4.init();
+  // motor2.init();
+  // motor3.init();
+  // motor4.init();
 
   // Setup the communication links
   rPiLink.buffer.motor1 = 0;
@@ -75,8 +74,9 @@ void setup()
   while (!Serial);
 
   // Serial.setDebugOutput(true); // So as you can use printf
-  Serial.println("Setting Up..."); 
+  Serial.println("Setting Up...");
 
+  pinMode (2, OUTPUT);
   // setupI2CClient();
 
   setupCANBus();
@@ -87,30 +87,34 @@ void setup()
 
   setupButtons();
 
-  setupMotors();
+  // setupMotors();
 }
 
 void loop() {
 
   // Get the latest data including recent i2c master writes
-  rPiLink.updateBuffer();
+  // rPiLink.updateBuffer();
 
   loopCANReceiver();
 
-  loopCANSender();
+  // loopCANSender();
   // Use potentiometer to control motors
   // usePot();
 
   // Use push buttons to control motors
   // useButtons();
+  // digitalWrite(2, HIGH);
+  // delay(1000);
+  // digitalWrite(2, LOW);
+  // delay(1000);
 
   // Set motor values only in the range 100 to -100
   // testEncoders();
   
   // Reset the encoders
-  if (digitalRead(BUTTON_PIN3) == LOW) {
-    motor1.encoder.resetEncoder();
-  }
+  // if (digitalRead(BUTTON_PIN3) == LOW) {
+  //   motor1.encoder.resetEncoder();
+  // }
 
   if (MOTOR_MODE == PWM ) {
     motor1.applyPWMPower(rPiLink.buffer.motor1);
@@ -130,5 +134,5 @@ void loop() {
   // }
 
   // Write to buffer
-  rPiLink.finalizeWrites();
+  // rPiLink.finalizeWrites();
 }

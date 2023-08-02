@@ -8,11 +8,11 @@
   #include <Config.h>
 #endif
 
-#include <Wire.h> 
+// #include <Wire.h> 
 
-#ifndef AS5600
-  #include <AS5600.h>
-#endif  
+// #ifndef AS5600
+//   #include <AS5600.h>
+// #endif  
 
 // If using I2C
 // AS5600 as5600;   //  use default Wire

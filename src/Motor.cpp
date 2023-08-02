@@ -46,6 +46,7 @@ void Motor::init() {
   Stop             HIGH              HIGH 
 */ 
 void Motor::applyPower(int16_t speed){
+  // Serial.print(speed);
   DBSpeed_ = applyDeadband(speed, 10);
   if (DBSpeed_ > 400) {DBSpeed_ = 0;} // Take care of random values 
   
