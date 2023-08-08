@@ -3,16 +3,54 @@
 #include "Config.h"
 #include "Util.h"
 
+// Use either on rPiLink is defined in both
 // #include "I2C_Config.h"
+#include "CanBus.h"
+
 #include "Motor.h"
 // #include "GameController.h"
-
-#include "CanBus.h"
 
 Motor motor1 = Motor(0, MOTOR_MODE);
 // Motor motor2 = Motor(1, MOTOR_MODE);
 // Motor motor3 = Motor(2, MOTOR_MODE);
 // Motor motor4 = Motor(3, MOTOR_MODE);
+
+// ----------------------------------------------------
+// These loopXXX functions are meant to be inserted 
+// into the main loop as needed.
+// ----------------------------------------------------
+void loopMotors() {
+  
+  if (MOTOR_MODE == PWM ) {
+    motor1.applyPWMPower(rPiLink.buffer.motor1);
+  } else {
+    motor1.applyPower(rPiLink.buffer.motor1);
+  }
+}
+
+void loopEncoders() {
+  // Reset the encoders
+  if (digitalRead(BUTTON_PIN3) == LOW) {
+    motor1.encoder.resetEncoder();
+  }
+
+  if (MOTOR_MODE == PWM ) {
+    motor1.applyPWMPower(rPiLink.buffer.motor1);
+  } else {
+    motor1.applyPower(rPiLink.buffer.motor1);
+  }
+
+  // Encoders
+  // if (rPiLink.buffer.resetLeftEncoder) {
+  //   rPiLink.buffer.resetLeftEncoder = false;
+  //   Motor1.encoder.resetEncoder();
+  // }
+
+  // if (rPiLink.buffer.resetRightEncoder) {
+  //   rPiLink.buffer.resetRightEncoder = false;
+  //   Motor2.encoder.resetEncoder();
+  // }
+}
 
 int readPot() {
   int analogValue = analogRead(ANALOG_PIN1); 
@@ -22,19 +60,41 @@ int readPot() {
   return speed;
 }
 
-void useButtons() {
+int buttonPeriod = 0;
+void loopButtons() {
   // Set motor values only in the range 100 to -100
   if (digitalRead(BUTTON_PIN2) == LOW) {
-    rPiLink.buffer.motor1 = 100;
+    if (motor1.encoder.getCounts() > 200) {
+      rPiLink.buffer.motor1 = 0;
+    } else {
+      rPiLink.buffer.motor1 = 255;
+    }   
   }
   else if (digitalRead(BUTTON_PIN4) == LOW) {
-    rPiLink.buffer.motor1 = -100;
+    if (motor1.encoder.getCounts() < 0) {
+      rPiLink.buffer.motor1 = 0;
+    } else {
+      rPiLink.buffer.motor1 = -200;
+    }  
   } else {
     rPiLink.buffer.motor1 = 0;
+    buttonPeriod = 0;
   }
 }
 
-void usePot() {
+void loopPulseButtons() {
+  if (buttonPeriod < 3000){
+    loopButtons();
+  } else { 
+    rPiLink.buffer.motor1 = 0;
+  }
+  buttonPeriod++;
+  if (digitalRead(BUTTON_PIN4) == HIGH & digitalRead(BUTTON_PIN2) == HIGH) {
+    buttonPeriod = 0;
+  }
+}
+
+void loopPot() {
   // Set motor values only in the range 100 to -100
   int speed = readPot();
   rPiLink.buffer.motor1 = speed;
@@ -93,46 +153,30 @@ void setup()
 void loop() {
 
   // Get the latest data including recent i2c master writes
-  // rPiLink.updateBuffer();
+  rPiLink.updateBuffer();
 
+  // Use the CANBUS
   loopCANReceiver();
-
   // loopCANSender();
+
   // Use potentiometer to control motors
-  // usePot();
+  // loopPot();
 
+  // Use push buttons with short pulses
+  // loopPulseButtons();
+  
   // Use push buttons to control motors
-  // useButtons();
-  // digitalWrite(2, HIGH);
-  // delay(1000);
-  // digitalWrite(2, LOW);
-  // delay(1000);
-
+  // loopButtons();
+  
   // Set motor values only in the range 100 to -100
   // testEncoders();
   
-  // Reset the encoders
-  // if (digitalRead(BUTTON_PIN3) == LOW) {
-  //   motor1.encoder.resetEncoder();
-  // }
+  // Use encoders 
+  // loopEncoders();
 
-  if (MOTOR_MODE == PWM ) {
-    motor1.applyPWMPower(rPiLink.buffer.motor1);
-  } else {
-    motor1.applyPower(rPiLink.buffer.motor1);
-  }
-
-  // Encoders
-  // if (rPiLink.buffer.resetLeftEncoder) {
-  //   rPiLink.buffer.resetLeftEncoder = false;
-  //   Motor1.encoder.resetEncoder();
-  // }
-
-  // if (rPiLink.buffer.resetRightEncoder) {
-  //   rPiLink.buffer.resetRightEncoder = false;
-  //   Motor2.encoder.resetEncoder();
-  // }
+  // Use micro motors
+  // loopMotors();
 
   // Write to buffer
-  // rPiLink.finalizeWrites();
+  rPiLink.finalizeWrites();
 }

@@ -45,14 +45,10 @@
 #define MOTOR5_IN1 16
 #define MOTOR5_IN2 4
 
-#define MOTOR6_IN1 0
-#define MOTOR6_IN2 2 
+#define MOTOR6_IN1 6
+#define MOTOR6_IN2 7 
 
-#define MOTOR7_IN1 15
-#define MOTOR7_IN2 8
 
-#define MOTOR8_IN1 7
-#define MOTOR8_IN2 6 
 
 //---------------------------------------
 // Define the GPIO pins for the motors
@@ -70,7 +66,7 @@ static struct DRAM_ATTR MotorPins {
 // Define the motor mode here!
 #define DIGITAL 0
 #define PWM 1
-#define MOTOR_MODE DIGITAL
+#define MOTOR_MODE PWM
 
 // Define buttons
 #define BUTTON_PIN1 12 // ADC

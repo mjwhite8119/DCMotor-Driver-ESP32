@@ -101,7 +101,9 @@ void Motor::applyPWMPower(int16_t speed) {
     ledcWrite(channel_0, 0);  // Write a LOW
     encoder.direction = REVERSE;
 
-    printPort(); printSpeed();
+    // printPort(); 
+    // printSpeed();
+    encoder.printInfo();
     // Serial.print("Finger extended "); encoder.printInfo();
   }
 }
