@@ -15,6 +15,7 @@ CANBuffer<Data, 20> rPiLink;
 void setupCANBus() {
   
   Serial.println("CAN Receiver");
+  CAN.setPins(16,17);
 
   // start the CAN bus at 500 kbps
   if (!CAN.begin(500E3)) {
@@ -65,7 +66,7 @@ void loopCANSender() {
   // send packet: id is 11 bits, packet can contain up to 8 bytes of data
   Serial.print("Sending packet ... ");
 
-  CAN.beginPacket(0x12);
+  CAN.beginPacket(0x13);
   CAN.write('h');
   CAN.write('e');
   CAN.write('l');
