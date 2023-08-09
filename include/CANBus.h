@@ -13,7 +13,7 @@
 CANBuffer<Data, 20> rPiLink;
 
 void setupCANBus() {
-  
+  // Default pin CRX (GPIO4) CTX (GPIO5)
   Serial.println("CAN Receiver");
 
   // start the CAN bus at 500 kbps
