@@ -11,15 +11,15 @@
 
 // Buffer and delay time
 CANBuffer<Data, 20> rPiLink;
-// #define CAN_TX 16
-// #define CAN_RX 17
-#define CAN_TX 5
-#define CAN_RX 4
+#define CAN_TX 16
+#define CAN_RX 17
+// #define CAN_TX 5
+// #define CAN_RX 4
 
 void setupCANBus() {
   // Default pin CRX (GPIO4) CTX (GPIO5)
   CAN.setPins(CAN_TX,CAN_RX);
-  Serial.print("CAN setup on pins TX:RX ");Serial.print(CAN_TX);Serial.print(":");Serial.print(CAN_RX); 
+  Serial.print("CAN setup on pins TX:RX ");Serial.print(CAN_TX);Serial.print(":");Serial.println(CAN_RX); 
 
   // start the CAN bus at 500 kbps
   if (!CAN.begin(500E3)) {
@@ -28,6 +28,7 @@ void setupCANBus() {
   }
 }
 
+int cycle = 0;
 void loopCANReceiver() {
   // try to parse packet
   int packetSize = CAN.parsePacket();
@@ -63,6 +64,12 @@ void loopCANReceiver() {
     }
 
     Serial.println();
+  } else {
+    if (cycle > 100000) {
+      Serial.print(".");
+      cycle = 0;
+    }
+    cycle++;
   }
 }
 

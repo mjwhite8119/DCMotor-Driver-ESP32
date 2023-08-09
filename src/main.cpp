@@ -156,8 +156,8 @@ void loop() {
   rPiLink.updateBuffer();
 
   // Use the CANBUS
-  loopCANReceiver();
-  // loopCANSender();
+  // loopCANReceiver();
+  loopCANSender();
 
   // Use potentiometer to control motors
   // loopPot();
