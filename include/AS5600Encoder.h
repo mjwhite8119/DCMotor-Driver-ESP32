@@ -8,11 +8,11 @@
   #include <Config.h>
 #endif
 
-#include <Wire.h> 
+// #include <Wire.h> 
 
-#ifndef AS5600
-  #include <AS5600.h>
-#endif  
+// #ifndef AS5600
+//   #include <AS5600.h>
+// #endif  
 
 // If using I2C
 // AS5600 as5600;   //  use default Wire
@@ -33,24 +33,22 @@ class AS5600Encoder
     // Ticks of the right and left encoder. This is volatile so 
     // that it doesn't interfere with the rest of the code.
     volatile int32_t angle = 0;
+    int32_t offset = 0;
     uint8_t direction = STOPPED;
-    int count = 0;
+    int printCount = 0;
       
     void init();
 
-    void resetEncoder() {
-      angle = 0;
-      printPort();Serial.println(" Encoder reset");
-    }
+    void resetEncoder();
 
     int32_t getCounts();
 
     void printInfo() {
-      if (count > 10000) {
-        Serial.print("Ticks:");Serial.println(getCounts());   
-        count = 0;
+      if (printCount > 100) {
+        Serial.print("Angle:");Serial.println(getCounts());   
+        printCount = 0;
       }  
-      count += 1; 
+      printCount += 1; 
     }
 
     void printPort() {

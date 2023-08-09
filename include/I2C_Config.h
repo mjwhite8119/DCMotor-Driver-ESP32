@@ -6,10 +6,10 @@
 
 #include "Wire.h"
 #include "shmem_buffer.h"
-#include "ESP32RPiSlave.h"
-#ifndef WireSlave
-  #include <WireSlave.h>
-#endif
+#include "I2CBuffer.h"
+// #ifndef WireSlave
+//   #include <WireSlave.h>
+// #endif
 
 // Addresses for esp32s
 #define I2C_DEV_ADDR 0x55

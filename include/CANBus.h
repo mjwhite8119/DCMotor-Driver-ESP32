@@ -4,80 +4,92 @@
   #include <Arduino.h>
 #endif
 
-#include <ESP32CAN.h>
-#include <CAN_config.h>
-
 #include "shmem_buffer.h"
 #include "CANBuffer.h"
+
+#include <CAN.h>
 
 // Buffer and delay time
 CANBuffer<Data, 20> rPiLink;
 
-CAN_device_t CAN_cfg;               // CAN Config
-unsigned long previousMillis = 0;   // will store last time a CAN Message was send
-const int interval = 1000;          // interval at which send CAN Messages (milliseconds)
-const int rx_queue_size = 10;       // Receive Queue size
-
 void setupCANBus() {
-  Serial.println("Basic Demo - ESP32-Arduino-CAN");
-  CAN_cfg.speed = CAN_SPEED_125KBPS;
-  // CAN_cfg.tx_pin_id = GPIO_NUM_5;
-  // CAN_cfg.rx_pin_id = GPIO_NUM_4;
-  CAN_cfg.tx_pin_id = GPIO_NUM_21;
-  CAN_cfg.rx_pin_id = GPIO_NUM_22;
-  CAN_cfg.rx_queue = xQueueCreate(rx_queue_size, sizeof(CAN_frame_t));
-  // Init CAN Module
-  ESP32Can.CANInit();
+  
+  Serial.println("CAN Receiver");
+
+  // start the CAN bus at 500 kbps
+  if (!CAN.begin(500E3)) {
+    Serial.println("Starting CAN failed!");
+    while (1);
+  }
 }
 
-void loopCANBus() {
+void loopCANReceiver() {
+  // try to parse packet
+  int packetSize = CAN.parsePacket();
 
-  CAN_frame_t rx_frame;
+  if (packetSize) {
+    // received a packet
+    Serial.print("Received ");
 
-  unsigned long currentMillis = millis();
-
-  // Receive next CAN frame from queue
-  if (xQueueReceive(CAN_cfg.rx_queue, &rx_frame, 3 * portTICK_PERIOD_MS) == pdTRUE) {
-
-    if (rx_frame.FIR.B.FF == CAN_frame_std) {
-      printf("New standard frame");
-    }
-    else {
-      printf("New extended frame");
+    if (CAN.packetExtended()) {
+      Serial.print("extended ");
     }
 
-    if (rx_frame.FIR.B.RTR == CAN_RTR) {
-      printf(" RTR from 0x%08X, DLC %d\r\n", rx_frame.MsgID,  rx_frame.FIR.B.DLC);
+    if (CAN.packetRtr()) {
+      // Remote transmission request, packet contains no data
+      Serial.print("RTR ");
     }
-    else {
-      printf(" from 0x%08X, DLC %d, Data ", rx_frame.MsgID,  rx_frame.FIR.B.DLC);
-      for (int i = 0; i < rx_frame.FIR.B.DLC; i++) {
-        printf("0x%02X ", rx_frame.data.u8[i]);
-      }
-      printf("\n");
-    }
-  }
-  // Send CAN Message
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis;
-    CAN_frame_t tx_frame;
-    tx_frame.FIR.B.FF = CAN_frame_std;
-    tx_frame.MsgID = 0x001;
-    tx_frame.FIR.B.DLC = 8;
-    tx_frame.data.u8[0] = 0x00;
-    tx_frame.data.u8[1] = 0x01;
-    tx_frame.data.u8[2] = 0x02;
-    tx_frame.data.u8[3] = 0x03;
-    tx_frame.data.u8[4] = 0x04;
-    tx_frame.data.u8[5] = 0x05;
-    tx_frame.data.u8[6] = 0x06;
-    tx_frame.data.u8[7] = 0x07;
-    int success = ESP32Can.CANWriteFrame(&tx_frame);
 
-    if (success == 0) {
-      Serial.println("Message sent");
+    Serial.print("packet with id 0x");
+    Serial.print(CAN.packetId(), HEX);
+
+    if (CAN.packetRtr()) {
+      Serial.print(" and requested length ");
+      Serial.println(CAN.packetDlc());
     } else {
-      Serial.println("Failed!");
+      Serial.print(" and length ");
+      Serial.println(packetSize);
+
+      // only print packet data for non-RTR packets
+      while (CAN.available()) {
+        Serial.print((char)CAN.read());
+      }
+      Serial.println();
     }
+
+    Serial.println();
   }
 }
+
+void loopCANSender() {
+  // send packet: id is 11 bits, packet can contain up to 8 bytes of data
+  Serial.print("Sending packet ... ");
+
+  CAN.beginPacket(0x12);
+  CAN.write('h');
+  CAN.write('e');
+  CAN.write('l');
+  CAN.write('l');
+  CAN.write('o');
+  CAN.endPacket();
+
+  Serial.println("done");
+
+  delay(1000);
+
+  // send extended packet: id is 29 bits, packet can contain up to 8 bytes of data
+  Serial.print("Sending extended packet ... ");
+
+  CAN.beginExtendedPacket(0xabcdef);
+  CAN.write('w');
+  CAN.write('o');
+  CAN.write('r');
+  CAN.write('l');
+  CAN.write('d');
+  CAN.endPacket();
+
+  Serial.println("done");
+
+  delay(1000);
+}
+

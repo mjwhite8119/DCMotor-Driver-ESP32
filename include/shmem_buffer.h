@@ -13,12 +13,12 @@ struct Data {
   // uint8_t status;
   // bool heartbeat;
   // uint16_t batteryMillivolts;
-  int8_t motor1;
-  int8_t motor2;
-  int8_t motor3;
-  int8_t motor4;
-  int8_t motor5;
-  int8_t motor6;
+  int16_t motor1;
+  int16_t motor2;
+  int16_t motor3;
+  int16_t motor4;
+  int16_t motor5;
+  int16_t motor6;
   bool resetEncoder1;
   bool resetEncoder2;
   bool resetEncoder3;

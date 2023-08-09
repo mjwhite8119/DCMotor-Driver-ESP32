@@ -13,6 +13,10 @@ AS5600Encoder::AS5600Encoder(uint8_t pinGroup)
 */
 void AS5600Encoder::init() {
   pinMode(motorPinGroup[pinGroup_].encoderA, INPUT); //  channel A
+
+  // Get an offset so as we can start from zero degrees
+  resetEncoder();
+
   // pinMode(motorPinGroup[pinGroup_].encoderB, INPUT); //  channel B
   // Wire.begin();
   // //  as5600.begin(14,15);
@@ -53,5 +57,13 @@ float AS5600Encoder::convertRawAngleToDegrees(word newAngle)
 int32_t AS5600Encoder::getCounts() {
   // angle = convertRawAngleToDegrees(as5600.rawAngle());
   angle = analogRead(motorPinGroup[pinGroup_].encoderA);
-  return angle;
+  return convertRawAngleToDegrees(angle) - offset;
+}
+
+void AS5600Encoder::resetEncoder() {
+  angle = analogRead(motorPinGroup[pinGroup_].encoderA);
+  offset = convertRawAngleToDegrees(angle);
+  printPort();Serial.println(" Encoder reset");
+  Serial.print("Angle:");Serial.println(getCounts()); 
+  Serial.print("Offset:");Serial.println(offset); 
 }

@@ -14,11 +14,6 @@ template <class BufferType, unsigned int pi_delay_us>
   BufferType staging_buffer;
   BufferType buffer_old;
 
-  void piDelay()
-  {
-    delayMicroseconds(pi_delay_us);
-  }
-
   void updateI2CBuffer()
   {
     memcpy(&i2c_read_buffer, &staging_buffer, sizeof(BufferType));
@@ -59,30 +54,26 @@ template <class BufferType, unsigned int pi_delay_us>
 
   virtual void receive()
   {
+      // Read the CANBus data here...
       // i2c_write_buffer[i2c_write_length] = Wire.read();
       // i2c_write_length ++;
   }
 
   virtual void transmit()
   {
-    // piDelay();
     Serial.println("transmit");
     uint8_t i;
     for(i=0; i < sizeof(BufferType); i++)
     { 
       Serial.print(((uint8_t *)&i2c_read_buffer)[i]);
+      // Write the CANBus data here...
       // Wire.write(((uint8_t *)&i2c_read_buffer)[i]);
     }
     Serial.println();
-    // Serial.println(i2c_read_buffer.encoder1);
-    // Serial.println(i2c_read_buffer.encoder2);
-    // // Serial.println(i2c_read_buffer.encoder3);
-    // Serial.println(i2c_read_buffer.encoder6);
   }
 
   virtual void start()
   {
-    // piDelay();
     index_set = false;
   }
 
@@ -90,11 +81,6 @@ template <class BufferType, unsigned int pi_delay_us>
   {
     finalizeI2CWrites();
   }
-
-  // virtual int16_t getEncoder1() {
-  //   int16_t num = ((uint8_t *)&i2c_read_buffer)[16] | (uint8_t *)&i2c_read_buffer)[17] << 8
-  //   return num;
-  // }
 
   virtual void printWriteBuffer() {
     uint8_t i;
