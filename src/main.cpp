@@ -6,6 +6,7 @@
 // Use either on rPiLink is defined in both
 // #include "I2C_Config.h"
 #include "CanBus.h"
+#include "CANOpenNode.h"
 
 #include "Motor.h"
 // #include "GameController.h"
@@ -139,7 +140,8 @@ void setup()
   pinMode (2, OUTPUT);
   // setupI2CClient();
 
-  setupCANBus();
+  // setupCANBus();
+  setupCANOpen();
 
   // setupI2CServer();
 
@@ -157,7 +159,8 @@ void loop() {
 
   // Use the CANBUS
   // loopCANReceiver();
-  loopCANSender();
+  // loopCANSender();
+  loopCANOpen();
 
   // Use potentiometer to control motors
   // loopPot();
