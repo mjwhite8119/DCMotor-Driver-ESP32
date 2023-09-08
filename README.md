@@ -12,10 +12,9 @@ The buffer for motors is int8, so only values of 128 to -128 is possible.  For t
 ## Polulu Encoders
 Using both interrupts gives 12 ticks per/revolution.  A single interrupt give only 6 ticks per/revolution.
 
-## CANOpen
+## CANbus
 
-- [ESP32 implementation](https://github.com/thaanstad/ESP32_CanOpenNode/tree/main) Arduino 
+Uses the ESP32 implementation [ESP32-Arduino-CAN](https://github.com/miwagner/ESP32-Arduino-CAN/tree/master/src). Set the speed to 500kBps.  You can set the TX and RX to any PWM pins.
 
-- Based on [CanOpenNode](https://github.com/CANopenNode/CANopenNode)
+    CAN_cfg.speed = CAN_SPEED_500KBPS;
 
-- [Electronic Data Sheet (EDS) Editor](https://github.com/CANopenNode/CANopenEditor)

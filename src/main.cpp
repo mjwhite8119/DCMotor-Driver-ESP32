@@ -7,8 +7,6 @@
 
 // Use either on rPiLink is defined in both
 // #include "I2C_Config.h"
-// #include "CanBus.h"
-// #include "CANOpenNode.h"
 #include "ArduinoCAN.h"
 
 // #include "Motor.h"
@@ -147,9 +145,6 @@ void setup()
   // setupI2CClient();
 
   setupArduinoCAN();
-  // setupCANBus();
-  // setupCANOpen();
-
 
   // setupI2CServer();
 
@@ -166,9 +161,6 @@ void loop() {
   rPiLink.updateBuffer();
 
   // Use the CANBUS
-  // loopCANReceiver();
-  // loopCANSender();
-  // loopCANOpen();
   loopArduinoCAN();
 
   // Use potentiometer to control motors. Assigns PWM value to rPiLink.buffer
