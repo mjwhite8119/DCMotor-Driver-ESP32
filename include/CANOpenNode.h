@@ -622,7 +622,7 @@ static void CO_main(void* arg) {
 void setupCANOpen()
 {
 	//delay(8000);
-	Serial.begin(SERIALBAUD);
+	// Serial.begin(SERIALBAUD);
 	ESP_LOGI(STARTUP_TAG, "BOOTING, Compiled " __DATE__ " " __TIME__);
 
 	CAN_ctrl_task_sem = xSemaphoreCreateBinary();

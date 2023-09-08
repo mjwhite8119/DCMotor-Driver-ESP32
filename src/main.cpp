@@ -2,16 +2,22 @@
 
 #include "Config.h"
 #include "Util.h"
+#include "CANBuffer.h"
+#include "shmem_buffer.h"
 
 // Use either on rPiLink is defined in both
 // #include "I2C_Config.h"
-#include "CanBus.h"
-#include "CANOpenNode.h"
+// #include "CanBus.h"
+// #include "CANOpenNode.h"
+#include "ArduinoCAN.h"
 
-#include "Motor.h"
+// #include "Motor.h"
+#include "VictorSPX_Motor.h"
 // #include "GameController.h"
+// CANBuffer<Data, 20> rPiLink;
 
-Motor motor1 = Motor(0, MOTOR_MODE);
+VictorSPX_Motor motor1 = VictorSPX_Motor(2, MOTOR_MODE);
+// Motor motor1 = Motor(0, MOTOR_MODE);
 // Motor motor2 = Motor(1, MOTOR_MODE);
 // Motor motor3 = Motor(2, MOTOR_MODE);
 // Motor motor4 = Motor(3, MOTOR_MODE);
@@ -140,8 +146,10 @@ void setup()
   pinMode (2, OUTPUT);
   // setupI2CClient();
 
+  setupArduinoCAN();
   // setupCANBus();
-  setupCANOpen();
+  // setupCANOpen();
+
 
   // setupI2CServer();
 
@@ -160,9 +168,10 @@ void loop() {
   // Use the CANBUS
   // loopCANReceiver();
   // loopCANSender();
-  loopCANOpen();
+  // loopCANOpen();
+  loopArduinoCAN();
 
-  // Use potentiometer to control motors
+  // Use potentiometer to control motors. Assigns PWM value to rPiLink.buffer
   // loopPot();
 
   // Use push buttons with short pulses

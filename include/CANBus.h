@@ -11,8 +11,10 @@
 
 // Buffer and delay time
 CANBuffer<Data, 20> rPiLink;
-#define CAN_TX 16
-#define CAN_RX 17
+#define CAN_TX 21 // Orange
+#define CAN_RX 22 // Yellow
+// #define CAN_TX 16
+// #define CAN_RX 17
 // #define CAN_TX 5
 // #define CAN_RX 4
 
@@ -83,6 +85,7 @@ void loopCANSender() {
   CAN.write('l');
   CAN.write('l');
   CAN.write('o');
+  Serial.print("Ready to send");
   CAN.endPacket();
 
   Serial.println("done");
